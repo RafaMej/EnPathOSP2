@@ -7,26 +7,27 @@
 
 import SwiftUI
 import SwiftData
+import AVKit
+import CoreLocation
+import UserNotifications
 
 @main
 struct EnPathOSApp: App {
-    var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
-        let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
-
-        do {
-            return try ModelContainer(for: schema, configurations: [modelConfiguration])
-        } catch {
-            fatalError("Could not create ModelContainer: \(error)")
-        }
-    }()
-
+    @StateObject private var appState = AppState.shared
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(appState)
+                .preferredColorScheme(.light)
+                .onAppear {
+                    requestPermissions()
+                }
         }
-        .modelContainer(sharedModelContainer)
+    }
+    
+    func requestPermissions() {
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]) { _, _ in }
+        LocationManager.shared.requestAuthorization()
     }
 }
