@@ -9,6 +9,8 @@ import SwiftData
 
 struct ContentView: View {
     @State private var showSplash = true
+    @ObservedObject private var appState = AppState.shared
+    
     
     var body: some View {
         ZStack {

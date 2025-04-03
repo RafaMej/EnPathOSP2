@@ -69,6 +69,7 @@ class AppState: ObservableObject {
             }
             
             self.isLoggedIn = true
+            print("Completado")
         }
     }
     
